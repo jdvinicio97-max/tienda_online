@@ -90,3 +90,14 @@ tienda_online/
 ├── requirements.txt
 ├── .gitignore
 └── README.md
+
+## Capturas de pantalla
+
+### Catálogo
+![Catálogo](static/capturas/catalogo.png)
+
+### Detalle de producto
+![Detalle de producto](static/capturas/detalle.png)
+
+### Carrito de compras
+![Carrito de compras](static/capturas/carrito.png)
