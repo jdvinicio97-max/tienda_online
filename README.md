@@ -19,21 +19,21 @@ El proyecto fue desarrollado siguiendo las actividades de las Semanas 1, 2 y 3, 
   - Administrador.
   - Cliente.
 - Control de permisos.
-- Crear productos físicos.
-- Crear productos digitales.
-- Crear productos perecibles.
-- Editar productos.
-- Desactivar productos.
+- Creación de productos físicos.
+- Creación de productos digitales.
+- Creación de productos perecibles.
+- Edición de productos.
+- Desactivación de productos.
 - Catálogo de productos.
 - Vista de detalle de cada producto.
 - Carrito de compras.
 - Agregar productos al carrito.
-- Eliminar productos del carrito.
+- Quitar productos del carrito.
 - Cálculo automático de subtotal y total.
 - Subida de imágenes de productos.
-- Edición de imágenes.
+- Cambio de imágenes mediante edición.
 - Diseño responsive con Bootstrap.
-- Interfaz mejorada con CSS personalizado.
+- Estilos personalizados con CSS.
 
 ---
 
@@ -62,7 +62,13 @@ tienda_online/
 │   ├── css/
 │   │   └── style.css
 │   │
-│   └── uploads/
+│   ├── uploads/
+│   │   └── imágenes de productos
+│   │
+│   └── capturas/
+│       ├── catalogo.png
+│       ├── detalle.png
+│       └── carrito.png
 │
 ├── templates/
 │   ├── base.html
