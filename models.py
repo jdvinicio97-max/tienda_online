@@ -40,6 +40,7 @@ class Producto(db.Model):
     precio_base = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, nullable=False)
     activo = db.Column(db.Boolean, default=True)
+    imagen = db.Column(db.String(255), nullable=True)
 
     #Columnas para ProductoFisico
     peso_kg = db.Column(db.Float, nullable=True)

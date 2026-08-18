@@ -4,7 +4,6 @@
 Nuevo Producto Perecible
 {% endblock %}
 
-
 {% block content %}
 
 <a href="{{ url_for('inicio') }}"
@@ -14,7 +13,6 @@ Nuevo Producto Perecible
 
 </a>
 
-
 <div class="card">
 
     <div class="card-body">
@@ -23,9 +21,7 @@ Nuevo Producto Perecible
             🍓 Nuevo Producto Perecible
         </h2>
 
-
-        <form method="POST">
-
+        <form method="POST" enctype="multipart/form-data">
 
             <div class="mb-3">
 
@@ -40,7 +36,6 @@ Nuevo Producto Perecible
 
             </div>
 
-
             <div class="mb-3">
 
                 <label class="form-label">
@@ -54,39 +49,34 @@ Nuevo Producto Perecible
 
             </div>
 
+            <div class="mb-3">
 
-            <div class="row">
+                <label class="form-label">
+                    Precio base
+                </label>
 
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Precio base ($)
-                    </label>
-
-                    <input type="number"
-                           step="0.01"
-                           class="form-control"
-                           name="precio_base"
-                           required>
-
-                </div>
-
-
-                <div class="col-md-6 mb-3">
-
-                    <label class="form-label">
-                        Stock inicial
-                    </label>
-
-                    <input type="number"
-                           class="form-control"
-                           name="stock"
-                           required>
-
-                </div>
+                <input type="number"
+                       class="form-control"
+                       name="precio_base"
+                       step="0.01"
+                       min="0"
+                       required>
 
             </div>
 
+            <div class="mb-3">
+
+                <label class="form-label">
+                    Stock
+                </label>
+
+                <input type="number"
+                       class="form-control"
+                       name="stock"
+                       min="0"
+                       required>
+
+            </div>
 
             <div class="mb-3">
 
@@ -97,26 +87,41 @@ Nuevo Producto Perecible
                 <input type="number"
                        class="form-control"
                        name="dias_para_vencer"
+                       min="0"
                        required>
-
-
-                <small class="text-muted">
-
-                    3 días o menos = 50% descuento ·
-                    7 días o menos = 20% descuento
-
-                </small>
 
             </div>
 
+            <div class="mb-3">
+
+                <label for="imagen"
+                       class="form-label">
+
+                    Imagen del producto
+
+                </label>
+
+                <input type="file"
+                       class="form-control"
+                       id="imagen"
+                       name="imagen"
+                       accept=".png,.jpg,.jpeg,.webp">
+
+            </div>
 
             <button type="submit"
                     class="btn btn-primary">
 
-                Crear producto
+                Guardar producto
 
             </button>
 
+            <a href="{{ url_for('inicio') }}"
+               class="btn btn-secondary">
+
+                Cancelar
+
+            </a>
 
         </form>
 

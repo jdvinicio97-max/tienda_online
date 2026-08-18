@@ -7,125 +7,205 @@
 {% block content %}
 
 <a href="{{ url_for('inicio') }}"
-   class="btn btn-outline-secondary mb-3">
-
+   class="btn btn-outline-secondary mb-4">
     ← Volver al catálogo
-
 </a>
 
-<div class="card">
+<div class="card border-0 shadow-sm rounded-4 overflow-hidden">
 
-    <div class="card-body">
+    <div class="card-body p-4">
 
-        <span class="badge bg-secondary mb-2">
-            {{ producto.tipo }}
-        </span>
+        <div class="row g-4 align-items-center">
 
-        <h1>
-            {{ producto.nombre }}
-        </h1>
+            <div class="col-12 col-md-5">
 
-        <p class="text-muted">
-            Código: {{ producto.codigo }}
-        </p>
+                {% if producto.imagen %}
 
-        <p class="fs-3 fw-bold">
-            ${{ "%.2f"|format(producto.precio_final()) }}
-        </p>
+                <img
+                    src="{{ url_for('static', filename='uploads/' + producto.imagen) }}"
+                    alt="{{ producto.nombre }}"
+                    class="img-fluid rounded-4 w-100"
+                    style="max-height: 430px; object-fit: cover;">
 
-        <p>
-            Stock disponible: {{ producto.stock }}
-        </p>
+                {% else %}
 
-        {% if producto.tipo == "fisico" %}
+                <div
+                    class="bg-light rounded-4 d-flex align-items-center justify-content-center"
+                    style="height: 380px;">
 
-            <hr>
+                    <div class="text-center text-muted">
 
-            <h5>
-                Detalles de envío
-            </h5>
+                        <div class="fs-1">
+                            📷
+                        </div>
 
-            <p>
-                Peso: {{ producto.peso_kg }} kg
-            </p>
+                        <p class="mb-0">
+                            Sin imagen
+                        </p>
 
-        {% elif producto.tipo == "digital" %}
+                    </div>
 
-            <hr>
+                </div>
 
-            <h5>
-                Detalles de licencia
-            </h5>
+                {% endif %}
 
-            <p>
-                Tipo de licencia:
-                {{ producto.licencia|capitalize }}
-            </p>
-
-        {% elif producto.tipo == "perecible" %}
-
-            <hr>
-
-            <h5>
-                Detalles de vencimiento
-            </h5>
-
-            <p>
-                Días para vencer:
-                {{ producto.dias_para_vencer }}
-            </p>
-
-        {% endif %}
+            </div>
 
 
-        {% if session.get('usuario_rol') == 'cliente' %}
+            <div class="col-12 col-md-7">
 
-        <hr>
+                {% if producto.tipo == "fisico" %}
 
-        <form action="{{ url_for('agregar_carrito', producto_id=producto.id) }}"
-              method="POST">
+                <span class="badge bg-primary mb-3">
+                    📦 Producto Físico
+                </span>
 
-            <button type="submit"
-                    class="btn btn-primary">
+                {% elif producto.tipo == "digital" %}
 
-                🛍️ Agregar al carrito
+                <span class="badge bg-info text-dark mb-3">
+                    💻 Producto Digital
+                </span>
 
-            </button>
+                {% elif producto.tipo == "perecible" %}
 
-        </form>
+                <span class="badge bg-success mb-3">
+                    🍓 Producto Perecible
+                </span>
 
-        {% endif %}
+                {% endif %}
 
 
-        {% if session.get('usuario_rol') == 'admin' %}
+                <h1 class="fw-bold mb-3">
+                    {{ producto.nombre }}
+                </h1>
 
-        <hr>
 
-        <div class="d-flex gap-2">
+                <p class="text-muted mb-3">
+                    Código: {{ producto.codigo }}
+                </p>
 
-            <a href="{{ url_for('editar_producto', producto_id=producto.id) }}"
-               class="btn btn-outline-primary">
 
-                ✏️ Editar
+                <h2 class="text-primary fw-bold mb-3">
+                    ${{ "%.2f"|format(producto.precio_final()) }}
+                </h2>
 
-            </a>
 
-            <form action="{{ url_for('eliminar_producto', producto_id=producto.id) }}"
-                  method="POST"
-                  onsubmit="return confirm('¿Seguro que quieres desactivar este producto?');">
+                <p class="mb-3">
 
-                <button type="submit"
-                        class="btn btn-outline-danger">
+                    <strong>
+                        Stock disponible:
+                    </strong>
 
-                    🗑️ Desactivar
+                    {{ producto.stock }}
 
-                </button>
+                </p>
 
-            </form>
+
+                {% if producto.tipo == "fisico" %}
+
+                <hr>
+
+                <h5 class="fw-bold">
+                    📦 Detalles de envío
+                </h5>
+
+                <p>
+                    Peso: {{ producto.peso_kg }} kg
+                </p>
+
+                <p>
+                    Costo de envío por kg:
+                    ${{ "%.2f"|format(producto.costo_envio_por_kg or 0) }}
+                </p>
+
+
+                {% elif producto.tipo == "digital" %}
+
+                <hr>
+
+                <h5 class="fw-bold">
+                    💻 Detalles de licencia
+                </h5>
+
+                <p>
+                    Tipo de licencia:
+                    {{ producto.licencia|capitalize }}
+                </p>
+
+
+                {% elif producto.tipo == "perecible" %}
+
+                <hr>
+
+                <h5 class="fw-bold">
+                    🍓 Detalles de vencimiento
+                </h5>
+
+                <p>
+                    Días para vencer:
+                    {{ producto.dias_para_vencer }}
+                </p>
+
+                {% endif %}
+
+
+                {% if session.get('usuario_rol') == 'cliente' %}
+
+                <hr>
+
+                <form
+                    action="{{ url_for('agregar_carrito', producto_id=producto.id) }}"
+                    method="POST">
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary btn-lg">
+
+                        🛍️ Agregar al carrito
+
+                    </button>
+
+                </form>
+
+                {% endif %}
+
+
+                {% if session.get('usuario_rol') == 'admin' %}
+
+                <hr>
+
+                <div class="d-flex flex-wrap gap-2">
+
+                    <a
+                        href="{{ url_for('editar_producto', producto_id=producto.id) }}"
+                        class="btn btn-outline-primary">
+
+                        ✏️ Editar
+
+                    </a>
+
+                    <form
+                        action="{{ url_for('eliminar_producto', producto_id=producto.id) }}"
+                        method="POST"
+                        onsubmit="return confirm('¿Seguro que quieres desactivar este producto?');">
+
+                        <button
+                            type="submit"
+                            class="btn btn-outline-danger">
+
+                            🗑️ Desactivar
+
+                        </button>
+
+                    </form>
+
+                </div>
+
+                {% endif %}
+
+            </div>
 
         </div>
-
-        {% endif %}
 
     </div>
 

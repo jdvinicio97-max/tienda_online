@@ -4,54 +4,163 @@
 Catálogo — Tienda Online
 {% endblock %}
 
+
 {% block content %}
 
-<h1 class="mb-4">
-    Catálogo de Productos
-</h1>
 
-<div class="row">
+<section class="hero-tienda">
+
+    <h1>
+        Encuentra lo que necesitas
+    </h1>
+
+    <p>
+        Productos físicos, digitales y perecibles en un solo lugar.
+    </p>
+
+</section>
+
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+
+    <div>
+
+        <h2 class="fw-bold mb-1">
+            Catálogo de productos
+        </h2>
+
+        <p class="text-muted mb-0">
+            Explora nuestros productos disponibles.
+        </p>
+
+    </div>
+
+</div>
+
+
+<div class="row g-4">
+
 
     {% for producto in productos %}
 
-    <div class="col-md-4 mb-4">
 
-        <div class="card h-100">
+    <div class="col-12 col-sm-6 col-lg-4">
 
-            <div class="card-body">
+        <div class="card producto-card h-100">
 
-                <span class="badge bg-secondary mb-2">
-                    {{ producto.tipo }}
-                </span>
 
-                <h5 class="card-title">
+            {% if producto.imagen %}
+
+            <img
+                src="{{ url_for('static', filename='uploads/' + producto.imagen) }}"
+                class="producto-imagen"
+                alt="{{ producto.nombre }}">
+
+            {% else %}
+
+            <div class="sin-imagen">
+
+                <div class="text-center">
+
+                    <div class="fs-1">
+                        📷
+                    </div>
+
+                    <span>
+                        Sin imagen
+                    </span>
+
+                </div>
+
+            </div>
+
+            {% endif %}
+
+
+            <div class="card-body d-flex flex-column">
+
+
+                <div>
+
+                    {% if producto.tipo == "fisico" %}
+
+                    <span class="badge bg-primary producto-tipo">
+
+                        📦 Físico
+
+                    </span>
+
+                    {% elif producto.tipo == "digital" %}
+
+                    <span class="badge bg-info text-dark producto-tipo">
+
+                        💻 Digital
+
+                    </span>
+
+                    {% elif producto.tipo == "perecible" %}
+
+                    <span class="badge bg-success producto-tipo">
+
+                        🍓 Perecible
+
+                    </span>
+
+                    {% endif %}
+
+                </div>
+
+
+                <h5 class="producto-nombre">
+
                     {{ producto.nombre }}
+
                 </h5>
 
-                <p class="card-text text-muted">
+
+                <p class="text-muted mb-2">
+
                     Código: {{ producto.codigo }}
+
                 </p>
 
-                <p class="card-text fs-4 fw-bold">
+
+                <p class="producto-precio">
+
                     ${{ "%.2f"|format(producto.precio_final()) }}
+
                 </p>
 
-                <div class="d-flex gap-2">
 
-                    <a href="{{ url_for('detalle_producto', producto_id=producto.id) }}"
-                       class="btn btn-primary">
+                <p class="text-muted">
+
+                    Stock disponible:
+                    {{ producto.stock }}
+
+                </p>
+
+
+                <div class="mt-auto d-flex gap-2">
+
+
+                    <a
+                        href="{{ url_for('detalle_producto', producto_id=producto.id) }}"
+                        class="btn btn-principal text-white">
 
                         Ver detalle
 
                     </a>
 
+
                     {% if session.get('usuario_rol') == 'cliente' %}
 
-                    <form action="{{ url_for('agregar_carrito', producto_id=producto.id) }}"
-                          method="POST">
+                    <form
+                        action="{{ url_for('agregar_carrito', producto_id=producto.id) }}"
+                        method="POST">
 
-                        <button type="submit"
-                                class="btn btn-primary">
+                        <button
+                            type="submit"
+                            class="btn btn-outline-primary">
 
                             🛍️
 
@@ -61,6 +170,7 @@ Catálogo — Tienda Online
 
                     {% endif %}
 
+
                 </div>
 
             </div>
@@ -69,14 +179,25 @@ Catálogo — Tienda Online
 
     </div>
 
+
     {% else %}
 
-    <p class="text-center text-muted">
-        No hay productos disponibles todavía.
-    </p>
+
+    <div class="col-12">
+
+        <div class="alert alert-info text-center">
+
+            No hay productos disponibles.
+
+        </div>
+
+    </div>
+
 
     {% endfor %}
 
+
 </div>
+
 
 {% endblock %}

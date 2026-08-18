@@ -4,8 +4,10 @@ app.py
 Punto de entrada de la aplicación. Aquí se crea la app de Flask,
 se conecta con la base de datos, y se definen las rutas (URLs).
 """
-
+import os
+from uuid import uuid4
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from werkzeug.utils import secure_filename
 from config import Config
 from models import db, Producto, ProductoFisico, ProductoDigital, ProductoPerecible, Usuario
 from auth import login_requerido, rol_requerido
@@ -16,6 +18,48 @@ app.config.from_object(Config)
 
 # Conecta esta app con la instancia de SQLAlchemy definida en models.py
 db.init_app(app)
+
+
+# ==========================================================
+# CONFIGURACIÓN PARA SUBIR IMÁGENES
+# ==========================================================
+
+UPLOAD_FOLDER = os.path.join(app.root_path, "static", "uploads")
+app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+
+EXTENSIONES_PERMITIDAS = {"png", "jpg", "jpeg", "webp"}
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+
+
+def extension_permitida(nombre_archivo):
+    return (
+        "." in nombre_archivo
+        and nombre_archivo.rsplit(".", 1)[1].lower() in EXTENSIONES_PERMITIDAS
+    )
+
+
+def guardar_imagen(archivo):
+
+    if archivo is None or archivo.filename == "":
+        return None
+
+    if not extension_permitida(archivo.filename):
+        return None
+
+    nombre_seguro = secure_filename(archivo.filename)
+    extension = nombre_seguro.rsplit(".", 1)[1].lower()
+
+    nombre_unico = f"{uuid4().hex}.{extension}"
+
+    ruta = os.path.join(
+        app.config["UPLOAD_FOLDER"],
+        nombre_unico
+    )
+
+    archivo.save(ruta)
+
+    return nombre_unico
 
 
 # ==========================================================
@@ -49,13 +93,18 @@ def nuevo_producto_fisico():
     if request.method == "POST":
 
         try:
+
+            imagen = request.files.get("imagen")
+            nombre_imagen = guardar_imagen(imagen)
+
             producto = ProductoFisico(
                 codigo=request.form["codigo"],
                 nombre=request.form["nombre"],
                 precio_base=float(request.form["precio_base"]),
                 stock=int(request.form["stock"]),
                 peso_kg=float(request.form["peso_kg"]),
-                costo_envio_por_kg=float(request.form["costo_envio_por_kg"])
+                costo_envio_por_kg=float(request.form["costo_envio_por_kg"]),
+                imagen=nombre_imagen
             )
 
             db.session.add(producto)
@@ -75,9 +124,10 @@ def nuevo_producto_fisico():
                 "danger"
             )
 
-        except Exception:
+        except Exception as error:
 
             db.session.rollback()
+            print(error)
 
             flash(
                 "Ocurrió un error. Verifica que el código no esté repetido.",
@@ -98,12 +148,17 @@ def nuevo_producto_digital():
     if request.method == "POST":
 
         try:
+
+            imagen = request.files.get("imagen")
+            nombre_imagen = guardar_imagen(imagen)
+
             producto = ProductoDigital(
                 codigo=request.form["codigo"],
                 nombre=request.form["nombre"],
                 precio_base=float(request.form["precio_base"]),
                 stock=int(request.form["stock"]),
-                licencia=request.form["licencia"]
+                licencia=request.form["licencia"],
+                imagen=nombre_imagen
             )
 
             db.session.add(producto)
@@ -123,9 +178,10 @@ def nuevo_producto_digital():
                 "danger"
             )
 
-        except Exception:
+        except Exception as error:
 
             db.session.rollback()
+            print(error)
 
             flash(
                 "Ocurrió un error. Verifica que el código no esté repetido.",
@@ -146,12 +202,17 @@ def nuevo_producto_perecible():
     if request.method == "POST":
 
         try:
+
+            imagen = request.files.get("imagen")
+            nombre_imagen = guardar_imagen(imagen)
+
             producto = ProductoPerecible(
                 codigo=request.form["codigo"],
                 nombre=request.form["nombre"],
                 precio_base=float(request.form["precio_base"]),
                 stock=int(request.form["stock"]),
-                dias_para_vencer=int(request.form["dias_para_vencer"])
+                dias_para_vencer=int(request.form["dias_para_vencer"]),
+                imagen=nombre_imagen
             )
 
             db.session.add(producto)
@@ -171,9 +232,10 @@ def nuevo_producto_perecible():
                 "danger"
             )
 
-        except Exception:
+        except Exception as error:
 
             db.session.rollback()
+            print(error)
 
             flash(
                 "Ocurrió un error. Verifica que el código no esté repetido.",
@@ -196,9 +258,21 @@ def editar_producto(producto_id):
     if request.method == "POST":
 
         try:
+
             producto.nombre = request.form["nombre"]
             producto.precio_base = float(request.form["precio_base"])
             producto.stock = int(request.form["stock"])
+
+            imagen = request.files.get("imagen")
+
+            print("ARCHIVO RECIBIDO:", imagen)
+            print("NOMBRE:", imagen.filename if imagen else "NINGUNO")
+
+            if imagen and imagen.filename != "":
+                nombre_imagen = guardar_imagen(imagen)
+
+                if nombre_imagen:
+                    producto.imagen = nombre_imagen
 
             db.session.commit()
 
@@ -221,11 +295,20 @@ def editar_producto(producto_id):
                 "danger"
             )
 
+        except Exception as error:
+
+            db.session.rollback()
+            print(error)
+
+            flash(
+                "Ocurrió un error al actualizar el producto.",
+                "danger"
+            )
+
     return render_template(
         "editar.html",
         producto=producto
     )
-
 
 # ==========================================================
 # DESACTIVAR PRODUCTO

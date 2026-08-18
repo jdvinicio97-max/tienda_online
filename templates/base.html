@@ -1,37 +1,70 @@
 <!DOCTYPE html>
+
 <html lang="es">
 
 <head>
+
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
 
     <title>
-        {% block titulo %}Tienda Online{% endblock %}
+        {% block titulo %}
+        Tienda Online
+        {% endblock %}
     </title>
 
     <link
         href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
         rel="stylesheet">
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}">
+
 </head>
 
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+
+<nav class="navbar navbar-expand-lg navbar-dark">
 
     <div class="container">
 
-        <a class="navbar-brand" href="{{ url_for('inicio') }}">
+        <a class="navbar-brand"
+           href="{{ url_for('inicio') }}">
+
             🛒 Tienda Online
+
         </a>
 
-        <div class="collapse navbar-collapse">
 
-            <ul class="navbar-nav me-auto">
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#menuPrincipal">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <div class="collapse navbar-collapse"
+             id="menuPrincipal">
+
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('inicio') }}">
-                        Catálogo
+
+                    <a class="nav-link"
+                       href="{{ url_for('inicio') }}">
+
+                        🏠 Catálogo
+
                     </a>
+
                 </li>
 
 
@@ -51,30 +84,36 @@
                     <ul class="dropdown-menu">
 
                         <li>
+
                             <a class="dropdown-item"
                                href="{{ url_for('nuevo_producto_fisico') }}">
 
-                                + Producto Físico
+                                📦 Producto Físico
 
                             </a>
+
                         </li>
 
                         <li>
+
                             <a class="dropdown-item"
                                href="{{ url_for('nuevo_producto_digital') }}">
 
-                                + Producto Digital
+                                💻 Producto Digital
 
                             </a>
+
                         </li>
 
                         <li>
+
                             <a class="dropdown-item"
                                href="{{ url_for('nuevo_producto_perecible') }}">
 
-                                + Producto Perecible
+                                🍓 Producto Perecible
 
                             </a>
+
                         </li>
 
                     </ul>
@@ -106,54 +145,56 @@
 
                 {% if session.get('usuario_id') %}
 
-                    <li class="nav-item">
+                <li class="nav-item">
 
-                        <span class="nav-link text-light">
+                    <span class="nav-link text-light">
 
-                            👤 {{ session.get('usuario_nombre') }}
+                        👤 {{ session.get('usuario_nombre') }}
 
-                            <span class="badge bg-secondary">
-                                {{ session.get('usuario_rol') }}
-                            </span>
+                        <span class="badge bg-primary">
+
+                            {{ session.get('usuario_rol') }}
 
                         </span>
 
-                    </li>
+                    </span>
 
-                    <li class="nav-item">
+                </li>
 
-                        <a class="nav-link"
-                           href="{{ url_for('logout') }}">
+                <li class="nav-item">
 
-                            Cerrar sesión
+                    <a class="nav-link"
+                       href="{{ url_for('logout') }}">
 
-                        </a>
+                        Cerrar sesión
 
-                    </li>
+                    </a>
+
+                </li>
 
                 {% else %}
 
-                    <li class="nav-item">
+                <li class="nav-item">
 
-                        <a class="nav-link"
-                           href="{{ url_for('login') }}">
+                    <a class="nav-link"
+                       href="{{ url_for('login') }}">
 
-                            Iniciar sesión
+                        Iniciar sesión
 
-                        </a>
+                    </a>
 
-                    </li>
+                </li>
 
-                    <li class="nav-item">
+                <li class="nav-item">
 
-                        <a class="nav-link"
-                           href="{{ url_for('registro') }}">
+                    <a class="nav-link"
+                       href="{{ url_for('registro') }}">
 
-                            Registrarse
+                        Registrarse
 
-                        </a>
+                    </a>
 
-                    </li>
+                </li>
 
                 {% endif %}
 
@@ -166,7 +207,8 @@
 </nav>
 
 
-<div class="container mt-4">
+<main class="container mt-4">
+
 
     {% with mensajes = get_flashed_messages(with_categories=true) %}
 
@@ -174,17 +216,17 @@
 
             {% for categoria, texto in mensajes %}
 
-                <div class="alert alert-{{ categoria }} alert-dismissible fade show"
-                     role="alert">
+            <div class="alert alert-{{ categoria }} alert-dismissible fade show shadow-sm"
+                 role="alert">
 
-                    {{ texto }}
+                {{ texto }}
 
-                    <button type="button"
-                            class="btn-close"
-                            data-bs-dismiss="alert">
-                    </button>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert">
+                </button>
 
-                </div>
+            </div>
 
             {% endfor %}
 
@@ -196,7 +238,54 @@
     {% block content %}
     {% endblock %}
 
-</div>
+
+</main>
+
+
+<footer>
+
+    <div class="container">
+
+        <div class="row">
+
+            <div class="col-md-6 mb-3">
+
+                <h5>
+                    🛒 Tienda Online
+                </h5>
+
+                <p>
+                    Sistema desarrollado con Flask y PostgreSQL.
+                </p>
+
+                <p>
+                    Compra productos físicos, digitales y perecibles.
+                </p>
+
+            </div>
+
+
+            <div class="col-md-6 text-md-end">
+
+                <h5>
+                    Proyecto académico
+                </h5>
+
+                <p>
+                    Desarrollo Web con Flask
+                </p>
+
+                <p>
+                    © 2026 Tienda Online
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</footer>
 
 
 <script

@@ -1,0 +1,139 @@
+body {
+    background-color: #f5f7fa;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #1f2937;
+}
+
+.navbar {
+    background: linear-gradient(90deg, #111827, #1f2937);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+.navbar-brand {
+    font-size: 1.35rem;
+    font-weight: bold;
+}
+
+.nav-link {
+    transition: 0.3s;
+}
+
+.nav-link:hover {
+    color: #38bdf8 !important;
+}
+
+.hero-tienda {
+    background: linear-gradient(135deg, #0f172a, #1d4ed8);
+    color: white;
+    border-radius: 18px;
+    padding: 35px;
+    margin-bottom: 35px;
+}
+
+.hero-tienda h1 {
+    font-size: 2.3rem;
+    font-weight: bold;
+}
+
+.hero-tienda p {
+    margin-bottom: 0;
+    color: #dbeafe;
+    font-size: 1.05rem;
+}
+
+.producto-card {
+    border: none;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+}
+
+.producto-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.producto-imagen {
+    width: 100%;
+    height: 230px;
+    object-fit: contain;
+    background-color: #ffffff;
+    padding: 10px;
+}
+
+.sin-imagen {
+    height: 230px;
+    background-color: #e5e7eb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #6b7280;
+}
+
+.producto-tipo {
+    font-size: 0.75rem;
+    padding: 6px 10px;
+    border-radius: 20px;
+}
+
+.producto-nombre {
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.producto-precio {
+    font-size: 1.55rem;
+    font-weight: bold;
+    color: #1d4ed8;
+}
+
+.btn-principal {
+    background-color: #2563eb;
+    border-color: #2563eb;
+    border-radius: 9px;
+}
+
+.btn-principal:hover {
+    background-color: #1d4ed8;
+    border-color: #1d4ed8;
+}
+
+footer {
+    background-color: #111827;
+    color: #d1d5db;
+    margin-top: 60px;
+    padding: 30px 0;
+}
+
+footer h5 {
+    color: white;
+    font-weight: bold;
+}
+
+footer p {
+    margin-bottom: 5px;
+}
+
+@media (max-width: 768px) {
+
+    .hero-tienda {
+        padding: 25px 20px;
+        text-align: center;
+    }
+
+    .hero-tienda h1 {
+        font-size: 1.8rem;
+    }
+
+    .producto-imagen,
+    .sin-imagen {
+        height: 210px;
+    }
+
+    .navbar .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
